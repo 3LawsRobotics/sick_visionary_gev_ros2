@@ -1,0 +1,44 @@
+FROM ros:iron
+
+# Install dependencies
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    graphviz \
+    mscgen \
+    dia \
+    plantuml \
+    gdb \
+    clang-format-15 \
+    clang-tidy-15 \
+    git-lfs \
+    jq \
+    libclang-common-13-dev \
+    python3-pip \
+    ros-iron-rclcpp \
+    ros-iron-rclcpp-components \
+    ros-iron-cv-bridge \
+    libcv-bridge-dev \
+    iwyu \
+    wget
+
+# Download the latest version of Doxygen with proper PlantUML support
+# Hash taken from official website here: https://www.doxygen.nl/download.html
+RUN wget --no-check-certificate https://www.doxygen.nl/files/doxygen-1.11.0.linux.bin.tar.gz -P /tmp && \
+    echo "db68ca22b43c3d7efd15351329db5af9146ab1ac7eaccd61a894fe36612da8fb /tmp/doxygen-1.11.0.linux.bin.tar.gz" | sha256sum --check && \
+    tar -xzvf /tmp/doxygen-1.11.0.linux.bin.tar.gz --strip-components=2 -C /usr/bin/ doxygen-1.11.0/bin
+
+# Add tooling for coverage reporting
+RUN pip install --trusted-host pypi.org --trusted-host files.pythonhosted.org gcovr
+
+# Set defaults
+RUN update-alternatives --install /usr/bin/git-clang-format git-clang-format \
+    /usr/bin/git-clang-format-15 100
+RUN update-alternatives --install /usr/bin/clang-format clang-format \
+    /usr/bin/clang-format-15 100
+RUN update-alternatives --install /usr/bin/clang-tidy clang-tidy \
+    /usr/bin/clang-tidy-15 100
+RUN update-alternatives --install /usr/bin/run-clang-tidy run-clang-tidy \
+    /usr/bin/run-clang-tidy-15 100
+
+# Setup environment
+RUN ["/bin/bash", "-c", "source /opt/ros/iron/setup.bash"]

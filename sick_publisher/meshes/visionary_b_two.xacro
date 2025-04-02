@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro" name="Visionary-B Two">
+    <xacro:arg name="link_name" default=""/>
+    <link name="$(arg link_name)">
+        <visual>
+            <geometry>
+                <mesh filename="package://sick_publisher/meshes/visionary_b_two.dae" scale="0.005 0.005 0.005"/>
+            </geometry>
+        </visual>
+    </link>
+</robot>

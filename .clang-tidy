@@ -1,0 +1,39 @@
+# Copyright (c) 2024 SICK AG, Waldkirch
+# SPDX-License-Identifier: Unlicense
+
+Checks: >-
+  bugprone-*,
+  -bugprone-exception-escape,
+  clang-analyzer-*,
+  -clang-analyzer-cplusplus.NewDeleteLeaks,
+  clang-diagnostic-*,
+  -clang-diagnostic-deprecated-declarations,
+  readability-*,
+  -readability-redundant-member-init,
+  -readability-identifier-length,
+  -readability-magic-numbers,
+  cppcoreguidelines-*,
+  -cppcoreguidelines-avoid-c-arrays,
+  -cppcoreguidelines-avoid-magic-numbers,
+  -cppcoreguidelines-pro-type-vararg,
+  -cppcoreguidelines-pro-bounds-pointer-arithmetic,
+  -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
+
+CheckOptions:
+  - { key: bugprone-easily-swappable-parameters.MinimumLength, value: 3 }
+  - { key: readability-identifier-naming.ClassCase,                    value: CamelCase  }
+  - { key: readability-identifier-naming.AbstractClassPrefix,          value: I          }
+  - { key: readability-identifier-naming.FunctionCase,                 value: camelBack  }
+  - { key: readability-identifier-naming.MethodCase,                   value: camelBack  }
+  - { key: readability-identifier-naming.VariableCase,                 value: camelBack  }
+  - { key: readability-identifier-naming.NamespaceCase,                value: lower_case }
+  - { key: readability-identifier-naming.PrivateMemberPrefix,          value: m_         }
+  - { key: readability-identifier-naming.PointerParameterPrefix,       value: p          }
+  - { key: readability-identifier-naming.MacroDefinitionCase,          value: UPPER_CASE }
+  - { key: readability-identifier-naming.GlobalConstantCase,           value: CamelCase  }
+  - { key: readability-identifier-naming.GlobalVariablePrefix,         value: g          }
+  - { key: readability-identifier-naming.GlobalConstantPrefix,         value: k          }
+
+# We only treat serious findings as errors and not every clang-tidy suggestion
+WarningsAsErrors: 'clang-analyzer-*,readability-redundant-*,performance-*'
+FormatStyle: file

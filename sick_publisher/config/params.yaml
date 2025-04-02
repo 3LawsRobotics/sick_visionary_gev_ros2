@@ -1,0 +1,79 @@
+serial_numbers:
+  visionary_b_two: [] #23120015 24000001
+  visionary_s: [] # 20130008
+  visionary_t_mini: ["22420125"] #22420125
+
+visionary_b_two:
+  general:
+    set_streaming: true
+    publish_intensity: true
+    publish_depth: true
+    gev_config:
+      ComponentList: ["Range", "Intensity", "ImuBasic"]
+    gev_params:
+      MultiSlopeMode: "Off" # HDR control: Off / PresetAggressive
+      ExposureTimeSelector: "Range"
+      ExposureAuto: "Off" # Off / Continuous
+      # Only possible if ExposureAuto = 'Continuous'
+      #ExposureAutoFrameRateMin = 30
+      # Only possible if ExposureAuto = 'Off'
+      AcquisitionFrameRate: 30
+      #ExposureTimeSelector = 'Range'
+      #ExposureTime = 1700
+      FieldOfView: "Wide" # Wide / Narrow
+      # GevSCPD (inter-packet delay) can be used to stabilize ethernet bandwidth issues.
+      GevSCPD: 1
+      ChunkModeActive: true # mandatory to store intrinsics
+      # Filters
+      Scan3dDataFilterSelector: "ValidationFilter"
+      Scan3dDataFilterEnable: 1
+      Scan3dDepthValidationFilterLevel: -3
+  cam_23120015:
+    camera_rotation: [0.2, 0.2, 0.2]
+    camera_translation: [1.0, 2.0, 3.0]
+    gev_params:
+      GevSCPD: 100000
+  cam_24000001:
+    camera_rotation: [0.5, 0.5, 0.5]
+    camera_translation: [4.0, 5.0, 6.0]
+
+visionary_s:
+  general:
+    set_streaming: true
+    publish_intensity: true
+    publish_depth: true
+    gev_config:
+      ComponentList: ["Intensity", "Range"]
+  cam_20130008:
+    camera_rotation: [0.0, 0.0, 0.0]
+    camera_translation: [0.0, 0.0, 0.0]
+    # GigE-Vision parameters
+    gev_config:
+      ComponentList: ["Intensity", "Range"]
+    gev_params:
+      GevSCPD: 100000
+      ChunkModeActive: true # mandatory to store intrinsics
+      # Filters
+      Scan3dDataFilterSelector: "ValidationFilter"
+      Scan3dDataFilterEnable: 1
+      Scan3dDepthValidationFilterLevel: -3
+
+visionary_t_mini:
+  general:
+    set_streaming: true
+    publish_intensity: true
+    publish_depth: true
+    gev_config:
+      ComponentList: ["Intensity"]
+  cam_22420125:
+    camera_rotation: [0.0, 0.0, 0.0]
+    camera_translation: [0.0, 0.0, 0.0]
+    # GigE-Vision parameters
+    gev_config:
+      ComponentList: ["Range", "Intensity"]
+    gev_params:
+      GevSCPD: 1
+      ChunkModeActive: true # mandatory to store intrinsics
+      Scan3dDataFilterSelector: "Ambiguity"
+      Scan3dDataFilterEnable: 1
+      Scan3dAmbiguityScale: 0.3

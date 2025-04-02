@@ -1,0 +1,14 @@
+// Copyright (c) 2024 SICK AG, Waldkirch
+// SPDX-License-Identifier: Unlicense
+
+#ifndef TEST_ASSETS_HPP
+#define TEST_ASSETS_HPP
+
+#include <filesystem>
+
+namespace sick {
+
+    const std::filesystem::path kAssetsPath("@assets_path@");
+}
+
+#endif // TEST_ASSETS_HPP_

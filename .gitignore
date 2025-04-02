@@ -1,0 +1,8 @@
+# colcon directories
+build/
+install/
+log/
+.idea/
+
+# CLion build directories
+sick_publisher/cmake-build-*
