@@ -12,37 +12,43 @@ find_package(sensor_msgs REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_ros REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 ########## Camera adapter GeniStream ##########
-add_library(GenIStreamAdapter
-        ${PROJECT_SOURCE_DIR}/adapter/GenIStreamSDK/CameraDiscovery.cpp
-        ${PROJECT_SOURCE_DIR}/adapter/GenIStreamSDK/CameraFrame.cpp
-        ${PROJECT_SOURCE_DIR}/adapter/GenIStreamSDK/CameraControl.cpp)
+add_library(
+  GenIStreamAdapter
+  ${PROJECT_SOURCE_DIR}/adapter/GenIStreamSDK/CameraDiscovery.cpp
+  ${PROJECT_SOURCE_DIR}/adapter/GenIStreamSDK/CameraFrame.cpp
+  ${PROJECT_SOURCE_DIR}/adapter/GenIStreamSDK/CameraControl.cpp
+)
 add_library(sick::GenIStreamAdapter ALIAS GenIStreamAdapter)
 
 set_target_properties(GenIStreamAdapter PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
-target_include_directories(GenIStreamAdapter
-  PUBLIC
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/adapter>
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
-    $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>)
+target_include_directories(
+  GenIStreamAdapter
+  PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/adapter>
+         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
+         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
+)
 
 target_link_libraries(GenIStreamAdapter GenIStream::GenIStream)
 
 ament_target_dependencies(GenIStreamAdapter cv_bridge)
-ament_target_dependencies(GenIStreamAdapter  ament_index_cpp)
+ament_target_dependencies(GenIStreamAdapter ament_index_cpp)
 install(TARGETS GenIStreamAdapter)
 
 ########## Experimental: GenIStream plugin ##########
 add_library(GenIStreamPlugin SHARED plugin/GenIStreamPlugin.cpp)
 target_include_directories(GenIStreamPlugin PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>)
 ament_target_dependencies(GenIStreamPlugin pluginlib)
-install(TARGETS GenIStreamPlugin
+install(
+  TARGETS GenIStreamPlugin
   EXPORT ${PROJECT_NAME}Targets
   ARCHIVE DESTINATION ${INSTALL_ARCHIVE_DIR}
   LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}
-  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR})
+  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR}
+)
 
 ########## SICKPublisher Lib ##########
 add_library(SICKPublisher SHARED)
@@ -69,10 +75,12 @@ target_sources(
          utils/PointCloudUtils.hpp
          utils/PointCloudUtils.cpp
          CameraInfo.cpp
-         CameraParameters.cpp)
+         CameraParameters.cpp
+)
 add_library(sick::SICKPublisher ALIAS SICKPublisher)
 
-ament_target_dependencies(SICKPublisher
+ament_target_dependencies(
+  SICKPublisher
   rclcpp
   rclcpp_components
   std_msgs
@@ -80,30 +88,37 @@ ament_target_dependencies(SICKPublisher
   sensor_msgs
   tf2
   tf2_ros
-  cv_bridge)
+  cv_bridge
+)
 
-target_include_directories(SICKPublisher
+target_include_directories(
+  SICKPublisher
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
-         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
-         $<INSTALL_INTERFACE:include>)
+         $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include> $<INSTALL_INTERFACE:include>
+)
 
 set_target_properties(SICKPublisher PROPERTIES POSITION_INDEPENDENT_CODE ON)
 
 target_compile_definitions(
-  SICKPublisher PUBLIC -DSICK_ENABLE_LOGGING=$<BOOL:${SICK_ENABLE_LOGGING}>)
+  SICKPublisher PUBLIC -DSICK_ENABLE_LOGGING=$<BOOL:${SICK_ENABLE_LOGGING}>
+)
 
-target_link_libraries(SICKPublisher
+target_link_libraries(
+  SICKPublisher
   sick::GenIStreamAdapter
   $<$<CXX_COMPILER_ID:MSVC>:wsock32>
   $<$<CXX_COMPILER_ID:MSVC>:ws2_32>
   $<$<OR:$<CXX_COMPILER_ID:GNU>,$<CXX_COMPILER_ID:Clang>>:stdc++fs>
-  yaml-cpp::yaml-cpp)
+  yaml-cpp::yaml-cpp
+)
 
-install(TARGETS SICKPublisher
+install(
+  TARGETS SICKPublisher
   EXPORT ${PROJECT_NAME}Targets
   ARCHIVE DESTINATION ${INSTALL_ARCHIVE_DIR}
   LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}
-  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR})
+  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR}
+)
 
 # ######### SICKPublisher-Node ##########
 target_sources(SICKPublisher_component PUBLIC SICKPublisher.cpp)
@@ -111,20 +126,30 @@ add_library(sick::SICKPublisher_component ALIAS SICKPublisher_component)
 
 target_link_libraries(SICKPublisher_component SICKPublisher)
 
-ament_target_dependencies(SICKPublisher_component
-  cv_bridge rclcpp rclcpp_components sensor_msgs message_filters)
+ament_target_dependencies(
+  SICKPublisher_component
+  cv_bridge
+  rclcpp
+  rclcpp_components
+  sensor_msgs
+  message_filters
+)
 
-target_include_directories(SICKPublisher_component
+target_include_directories(
+  SICKPublisher_component
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/adapter>
-         $<INSTALL_INTERFACE:include>)
+         $<INSTALL_INTERFACE:include>
+)
 
-install(TARGETS SICKPublisher_component
+install(
+  TARGETS SICKPublisher_component
   EXPORT SICKPublisher_componentTargets
   ARCHIVE DESTINATION ${INSTALL_ARCHIVE_DIR}
   LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}
-  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR})
+  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR}
+)
 
 # ######### PointCloudPublisher Node ##########
 target_sources(PointCloudPublisher PUBLIC PointCloudPublisher.cpp)
@@ -132,20 +157,30 @@ add_library(sick::PointCloudPublisher ALIAS PointCloudPublisher)
 
 target_link_libraries(PointCloudPublisher SICKPublisher)
 
-ament_target_dependencies(PointCloudPublisher
-  cv_bridge rclcpp rclcpp_components sensor_msgs message_filters)
+ament_target_dependencies(
+  PointCloudPublisher
+  cv_bridge
+  rclcpp
+  rclcpp_components
+  sensor_msgs
+  message_filters
+)
 
-target_include_directories(PointCloudPublisher
+target_include_directories(
+  PointCloudPublisher
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/adapter>
-         $<INSTALL_INTERFACE:include>)
+         $<INSTALL_INTERFACE:include>
+)
 
-install(TARGETS PointCloudPublisher
+install(
+  TARGETS PointCloudPublisher
   EXPORT PointCloudPublisherTargets
   ARCHIVE DESTINATION ${INSTALL_ARCHIVE_DIR}
   LIBRARY DESTINATION ${INSTALL_LIBRARY_DIR}
-  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR})
+  RUNTIME DESTINATION ${INSTALL_RUNTIME_DIR}
+)
 
 # Manual Composition
 add_executable(manual_composition ManualComposition.cpp)
@@ -154,11 +189,13 @@ target_sources(manual_composition PUBLIC PointCloudPublisher.cpp SICKPublisher.c
 
 target_link_libraries(manual_composition SICKPublisher yaml-cpp::yaml-cpp)
 
-target_include_directories(manual_composition
+target_include_directories(
+  manual_composition
   PUBLIC $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/src>
          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/include>
          $<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/adapter>
-         $<INSTALL_INTERFACE:include>)
+         $<INSTALL_INTERFACE:include>
+)
 
 ament_target_dependencies(manual_composition rclcpp)
 
