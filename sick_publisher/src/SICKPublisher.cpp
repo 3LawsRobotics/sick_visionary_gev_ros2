@@ -62,8 +62,15 @@ VisionaryPublisher::VisionaryPublisher(const rclcpp::NodeOptions& options)
 
   // Get config file
   namespace fs = std::filesystem;
-  const std::string shareDir = ament_index_cpp::get_package_share_directory("sick_visionary_gev_ros2");
-  m_config = YAML::LoadFile(fs::path(shareDir + "/config/params.yaml").make_preferred().string());
+  declare_parameter<std::string>("config_filepath", "");
+  const auto configFilepath = get_parameter("config_filepath").as_string();
+  if (configFilepath.empty())
+  {
+    errLog(m_logNodeName) << "Failed to set config file path! Received empty string.";
+    throw std::runtime_error("Parameter 'config_filepath' not set");
+  }
+
+  m_config = YAML::LoadFile(configFilepath);
 
   if (!setSerialNumber())
   {
