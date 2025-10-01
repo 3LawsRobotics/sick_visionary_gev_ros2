@@ -246,24 +246,24 @@ void VisionaryPublisher::processFrame()
     if (!m_firstChunkProcessed)
     {
       getPointCloudParameters();
-      std::vector<geometry_msgs::msg::TransformStamped> transforms;
+      // std::vector<geometry_msgs::msg::TransformStamped> transforms;
 
       // Setup camera mounting options
-      if (m_cameraRotation.size() != 3 || m_cameraTranslation.size() != 3)
-      {
-        errLog(m_logNodeName) << "Parameters 'camera_rotation' and 'camera_translation' must each contain three values";
-      }
-      else
-      {
-        transforms.push_back(
-          createStaticTransforms("map", m_cameraFrame, m_cameraTranslation, m_cameraRotation, timeStamp));
-      }
+      // if (m_cameraRotation.size() != 3 || m_cameraTranslation.size() != 3)
+      // {
+      //   errLog(m_logNodeName) << "Parameters 'camera_rotation' and 'camera_translation' must each contain three values";
+      // }
+      // else
+      // {
+      //   transforms.push_back(
+      //     createStaticTransforms("map", m_cameraFrame, m_cameraTranslation, m_cameraRotation, timeStamp));
+      // }
 
       // Broadcast anchor-to-reference coordinate system transform
-      getAnchorToRefTransform();
-      transforms.push_back(
-        createStaticTransforms(m_cameraFrame, "anchor", m_anchorToRefTranslation, m_anchorToRefRotation, timeStamp));
-      m_staticBroadcaster.sendTransform(transforms);
+      // getAnchorToRefTransform();
+      // transforms.push_back(
+      //   createStaticTransforms(m_cameraFrame, "anchor", m_anchorToRefTranslation, m_anchorToRefRotation, timeStamp));
+      // m_staticBroadcaster.sendTransform(transforms);
 
       m_firstChunkProcessed = true;
     }
