@@ -49,7 +49,7 @@ namespace sick
 {
 VisionaryPublisher::VisionaryPublisher(const rclcpp::NodeOptions& options)
   : Node("visionary_publisher", options)
-  , m_staticBroadcaster(this)
+  // , m_staticBroadcaster(this)
   , m_camInfoMsg(nullptr)
   , m_serialNumber{0}
 {

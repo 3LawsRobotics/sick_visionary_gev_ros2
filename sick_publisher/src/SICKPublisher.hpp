@@ -139,7 +139,7 @@ private:
   rclcpp::Publisher<sensor_msgs::msg::CameraInfo>::SharedPtr m_camInfoPublisher;
 
   // Tf2
-  tf2_ros::StaticTransformBroadcaster m_staticBroadcaster;
+  // tf2_ros::StaticTransformBroadcaster m_staticBroadcaster;
 
   // Callbackgroups
   rclcpp::CallbackGroup::SharedPtr m_cameraLoopCallbackgroup;
