@@ -69,7 +69,7 @@ VisionaryPublisher::VisionaryPublisher(const rclcpp::NodeOptions& options)
     errLog(m_logNodeName) << "Failed to set config file path! Received empty string.";
     throw std::runtime_error("Parameter 'config_filepath' not set");
   }
-
+  infoLog(m_logNodeName) << "Using config file: " << configFilepath;
   m_config = YAML::LoadFile(configFilepath);
 
   if (!setSerialNumber())
